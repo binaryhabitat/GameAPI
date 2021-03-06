@@ -40,7 +40,7 @@ Unbeknownst to myself, a contributor ([trevorphillipscoding](https://github.com/
 on python-wowapi developed a separate fork, named [python-blizzardapi](https://github.com/trevorphillipscoding/python-blizzardapi). 
 GameAPI makes absolutely no use of code from either project, the latter only being discovered while doing due diligence before publishing to PyPi. 
 However, it is correct and proper both of these projects are given a mention. If GameAPI doesn't satisfy your needs,
-I direct you in their direction to see if their projects satisfy your needs.
+I direct you in their direction to see if their projects can help.
 
 ### The Legal Stuff
 #### Blizzard Entertainment

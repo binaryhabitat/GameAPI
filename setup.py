@@ -5,11 +5,12 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='GameAPI',
-    version='0.1',
+    version='0.1.1',
     description="GameAPI is a library for interacting with popular Game APIs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=setuptools.find_packages(),
+    author='BinaryHabitat',
+    packages=setuptools.find_packages(exclude=["tests.*", "tests"]),
     python_requires='>=3.8',
     install_requires=[
         'httpx==0.17'

@@ -489,11 +489,14 @@ class WarcraftAPI(BaseAPI):
 
         return self._request_gateway(resource, params)
 
-    def item_search(self, **kwargs) -> None:
+    def item_search(self, **kwargs) -> dict:
         """
-        NOT IMPLEMENTED. Performs a search of items.
+        Performs a search of items.
         """
-        raise NotImplementedError()
+        params = {'namespace': 'static'}
+        resource = "/data/wow/search/item"
+
+        return self._request_gateway(resource, params | kwargs)
 
     # Journal APIs
     def journal_expansions_index(self) -> dict:

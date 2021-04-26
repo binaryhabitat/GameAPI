@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='GameAPI',
-    version='0.1.2',
+    version='0.2',
     description="GameAPI is a library for interacting with popular Game APIs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,8 +19,8 @@ setuptools.setup(
         'httpx==0.17'
     ],
     classifiers=[
-	 'Intended Audience :: Developers',
-	 'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)'
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)'
     ],
     zip_safe=False
 )

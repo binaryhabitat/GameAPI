@@ -14,7 +14,7 @@ Features
 Strategy
 --------
 - Fork the repository
-- Open a pull [pull request](TBD)
+- Open a [pull request](https://github.com/binaryhabitat/GameAPI/compare)
 
 Issues
 ------

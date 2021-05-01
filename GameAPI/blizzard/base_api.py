@@ -33,10 +33,10 @@ class BaseAPI:
         return data
 
     def _refresh_token(self) -> None:
-        # TODO: Log.
+        # TODO: Log
 
-        # KR and TW OAuth requests have been merged in APAC.
-        # See: https://develop.battle.net/documentation/guides/using-oauth
+        # KR and TW OAuth requests have been merged in APAC
+        # Source https://develop.battle.net/documentation/guides/using-oauth
         region = self.api_region if self.api_region.lower() in ('us', 'eu') else 'apac'
 
         request = f'https://{region}.battle.net/oauth/token?grant_type=client_credentials' \

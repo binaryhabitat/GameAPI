@@ -9,9 +9,6 @@ from GameAPI.blizzard.errors import BlizzardAPIException
 class WarcraftAPI(BaseAPI):
     def __init__(self, client_id: str, client_secret: str, region: str, classic: bool = False):
         super().__init__(client_id, client_secret, region)
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.api_region = region
         self.classic = classic
 
     def _request_gateway(self, resource: str, parameters: dict, modified_since: Optional[datetime] = None) -> dict:

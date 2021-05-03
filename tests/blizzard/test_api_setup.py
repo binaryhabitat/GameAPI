@@ -37,6 +37,7 @@ class TestAPISetup(unittest.TestCase):
                           client_secret=self.test_valid_client_secret,
                           region=self.test_valid_region)
         self.assertIsInstance(api.oauth_token, OAuthToken)
+        self.assertEqual("", api.oauth_token.token)
 
 
 if __name__ == '__main__':

@@ -4,3 +4,7 @@ class BlizzardAPIException(Exception):
 
 class BlizzardAPIQuotaException(BlizzardAPIException):
     pass
+
+
+class BlizzardAPIUnmodifiedData(BlizzardAPIException):
+    pass

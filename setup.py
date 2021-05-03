@@ -5,18 +5,18 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='GameAPI',
-    version='0.2',
+    version='0.3',
     description="GameAPI is a library for interacting with popular Game APIs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author='BinaryHabitat',
     packages=setuptools.find_packages(exclude=["tests.*", "tests"]),
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     project_urls={
         'Source': 'https://github.com/binaryhabitat/GameAPI'
     },
     install_requires=[
-        'httpx==0.17'
+        'httpx>=0.18.1, <0.19'
     ],
     classifiers=[
         'Intended Audience :: Developers',

@@ -1,5 +1,6 @@
 import re
-from typing import Union
+from datetime import datetime
+from typing import Union, Optional
 
 from GameAPI.blizzard.base_api import BaseAPI
 from GameAPI.blizzard.errors import BlizzardAPIException
@@ -13,13 +14,14 @@ class WarcraftAPI(BaseAPI):
         self.api_region = region
         self.classic = classic
 
-    def _request_gateway(self, resource: str, parameters: dict) -> dict:
+    def _request_gateway(self, resource: str, parameters: dict, modified_since: Optional[datetime] = None) -> dict:
         """
         A gateway method that raises an exception if the API requested is not a
         valid request for the Warcraft Classic API.
 
         :param resource: The resource being requested (eg. /data/wow/connected-realm/index)
         :param parameters: The parameters for the request, (eg. the namespace 'static')
+        :param modified_since: A datetime object for use in a If-Modified-Since HTTP header
         """
         namespace = f"{parameters.get('namespace', '')}-{self.api_region}"
 
@@ -29,7 +31,15 @@ class WarcraftAPI(BaseAPI):
         parameters['namespace'] = namespace
         parameters['locale'] = 'en_US'
 
-        return self.request(resource, parameters)
+        # For large requests (especially auction house data) implement If-Modified-Since.
+        headers = {}
+        if modified_since:
+            if not isinstance(modified_since, datetime):
+                raise TypeError(f"Supplied modified_since '{modified_since}' is not a valid datetime.")
+
+            headers['if-modified-since'] = modified_since.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+        return self.request(resource, parameters, headers)
 
     # Achievement APIs
     def achievement_categories_index(self) -> dict:
@@ -84,7 +94,7 @@ class WarcraftAPI(BaseAPI):
         return self._request_gateway(resource, params)
 
     # Auction APIs
-    def auctions(self, connected_realm_id: int) -> dict:
+    def auctions(self, connected_realm_id: int, modified_since: Optional[datetime] = None) -> dict:
         """
         Returns all active auctions for a connected realm.
 
@@ -92,11 +102,12 @@ class WarcraftAPI(BaseAPI):
         the response from this endpoint may be rather large, sometimes exceeding 10 MB.
 
         :param connected_realm_id: The ID of the connected realm.
+        :param modified_since: Only return data if its newer than the datetime specified
         """
         params = {'namespace': 'dynamic'}
         resource = f"/data/wow/connected-realm/{connected_realm_id}/auctions"
 
-        return self._request_gateway(resource, params)
+        return self._request_gateway(resource, params, modified_since)
 
     # Azerite Essence APIs
     def azerite_essences_index(self) -> dict:

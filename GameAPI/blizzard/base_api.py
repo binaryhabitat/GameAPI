@@ -1,8 +1,9 @@
 import json
+from typing import Optional
 
 import httpx
 
-from .errors import BlizzardAPIException, BlizzardAPIQuotaException
+from .errors import BlizzardAPIException, BlizzardAPIQuotaException, BlizzardAPIUnmodifiedData
 from .helpers import OAuthToken
 from .helpers import datetime_in_n_seconds
 
@@ -19,13 +20,15 @@ class BaseAPI:
 
     @staticmethod
     def _process_httpx_response(response: httpx.Response) -> dict:
-        if response.status_code not in (200, 429):  # OK, Too Many Requests
-            raise BlizzardAPIException(f"Error. Status: {response.status_code}, URL: {response.url}")
-        elif response.status_code == 429:  # Too Many Requests
+        if response.status_code == 429:  # Too Many Requests
             raise BlizzardAPIQuotaException()
+        elif response.status_code == 304:  # Not Modified
+            raise BlizzardAPIUnmodifiedData()
+        elif response.status_code != 200:   # Not OK
+            raise BlizzardAPIException(f"Error. Status: {response.status_code}, URL: {response.url}")
 
         try:
-            # Attempt to json loads the data, this is done blindly
+            # Blindly JSON load Blizzard's data to verify it
             data = json.loads(response.content)
         except json.JSONDecodeError as ex:
             raise BlizzardAPIException(f"Invalid JSON returned from Blizzard. Exception: {ex}, URL: {response.url}")
@@ -55,7 +58,7 @@ class BaseAPI:
         except KeyError as ex:
             raise BlizzardAPIException(f"Invalid JSON returned from Blizzard. Exception: {ex}, URL: {request}")
 
-    def request(self, resource: str, parameters: dict = {}) -> dict:
+    def request(self, resource: str, parameters: Optional[dict] = None, headers: Optional[dict] = None) -> dict:
         if not self.oauth_token.token_valid() or not self.oauth_token:
             self._refresh_token()
 
@@ -63,6 +66,8 @@ class BaseAPI:
         base_url = f"https://{self.api_region}.api.blizzard.com"
 
         # Add access_token to parameters
+        if not parameters:
+            parameters = {}
         parameters['access_token'] = self.oauth_token.token
 
         # Construct the final URL to be queried
@@ -70,7 +75,7 @@ class BaseAPI:
 
         # Execute the GET request
         try:
-            response = httpx.get(request, params=parameters)
+            response = httpx.get(request, params=parameters, headers=headers)
         except httpx.ReadError as ex:
             # TODO: Log
             raise BlizzardAPIException(f"Exception raised by GET. Exception: {ex}, URL: {request}")

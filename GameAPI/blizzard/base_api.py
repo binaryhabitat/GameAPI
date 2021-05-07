@@ -73,10 +73,10 @@ class BaseAPI:
         # Construct the final URL to be queried
         request = f"{base_url}{resource}"
 
-        # Execute the GET request
         try:
+            # Execute the GET request
             response = httpx.get(request, params=parameters, headers=headers)
-        except httpx.ReadError as ex:
+        except (httpx.ReadError, httpx.ReadTimeout) as ex:
             # TODO: Log
             raise BlizzardAPIException(f"Exception raised by GET. Exception: {ex}, URL: {request}")
 

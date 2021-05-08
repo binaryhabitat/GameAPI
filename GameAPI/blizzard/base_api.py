@@ -76,7 +76,7 @@ class BaseAPI:
         try:
             # Execute the GET request
             response = httpx.get(request, params=parameters, headers=headers)
-        except (httpx.ReadError, httpx.ReadTimeout) as ex:
+        except (httpx.ReadError, httpx.ReadTimeout, httpx.ConnectTimeout, httpx.ConnectError) as ex:
             # TODO: Log
             raise BlizzardAPIException(f"Exception raised by GET. Exception: {ex}, URL: {request}")
 

@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='GameAPI',
-    version='0.3.1',
+    version='0.3.2',
     description="GameAPI is a library for interacting with popular Game APIs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
